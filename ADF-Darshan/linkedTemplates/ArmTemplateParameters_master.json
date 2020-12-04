@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "ADF-Darshan"
+		},
+		"Excel Connection_connectionString": {
+			"value": ""
+		},
+		"SqlServer1_connectionString": {
+			"value": ""
+		},
+		"SureshSQLDevelopConn_connectionString": {
+			"value": ""
+		},
+		"Textfile Connection_connectionString": {
+			"value": ""
+		},
+		"Event Trigger_properties_typeProperties_scope": {
+			"value": "/subscriptions/b3da697e-1de9-4851-af8f-5ffde3a8a78d/resourceGroups/Resource-Group-Suresh/providers/Microsoft.Storage/storageAccounts/myfirststoragesuresh"
+		},
+		"Shared-IRhost_properties_typeProperties_linkedInfo_resourceId": {
+			"value": "/subscriptions/b3da697e-1de9-4851-af8f-5ffde3a8a78d/resourcegroups/Resource-Group-Suresh/providers/Microsoft.DataFactory/factories/ADF-Suresh/integrationruntimes/IR-SelfHosted"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
