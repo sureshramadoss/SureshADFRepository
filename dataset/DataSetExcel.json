@@ -1,0 +1,19 @@
+{
+	"name": "DataSetExcel",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Excel Connection",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "tblemployee_split.xlsx",
+				"folderPath": "Input",
+				"container": "myfirstcontainer"
+			}
+		}
+	}
+}
