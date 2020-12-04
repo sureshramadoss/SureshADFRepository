@@ -25,6 +25,26 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/PipeLine-Wait-Testing')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 60
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Excel Connection')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -585,30 +605,6 @@
 							"value": "@dataset().FolderName",
 							"type": "Expression"
 						},
-						"container": "myfirstcontainer"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Textfile Connection')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/OutputBinaryDataSet')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Textfile Connection",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Binary",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "finalcust.txt",
-						"folderPath": "Output",
 						"container": "myfirstcontainer"
 					}
 				}

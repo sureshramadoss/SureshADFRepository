@@ -21,6 +21,28 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/OutputBinaryDataSet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Textfile Connection",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "finalcust.txt",
+						"folderPath": "Output",
+						"container": "myfirstcontainer"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/validationdataset')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -127,7 +149,9 @@
 				"annotations": [],
 				"lastPublishTime": "2020-11-29T16:27:10Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/OutputBinaryDataSet')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Pipeline-Filecopy')]",
@@ -194,7 +218,9 @@
 				"annotations": [],
 				"lastPublishTime": "2020-11-29T15:51:11Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/OutputBinaryDataSet')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Pipeline-ForEach')]",
@@ -565,7 +591,8 @@
 				"lastPublishTime": "2020-12-01T02:51:38Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/validationdataset')]"
+				"[concat(variables('factoryId'), '/datasets/validationdataset')]",
+				"[concat(variables('factoryId'), '/datasets/OutputBinaryDataSet')]"
 			]
 		},
 		{
@@ -914,38 +941,6 @@
 						}
 					],
 					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tinferDriftedColumnTypes: true) ~> OverallEmployees\nMapDrifted1 split(equals(Dept, '1'),\n\tequals(Dept, '2'),\n\tequals(Dept, '3'),\n\tequals(Dept, '4'),\n\tdisjoint: false,\n\tpartitionBy('hash', 1)) ~> ConditionalSplit1@(ITEmployees, HREmployees, PRODEmployees, PURCHASEEmployees, Others)\nOverallEmployees derive(emp_id = toString(byName('emp_id')),\n\t\temp_name = toString(byName('emp_name')),\n\t\temp_gender = toString(byName('emp_gender')),\n\t\temp_salary = toString(byName('emp_salary')),\n\t\tDept = toString(byName('Dept')),\n\t\t{Dept Name} = toString(byName('Dept Name'))) ~> MapDrifted1\nConditionalSplit1@ITEmployees sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['IT Employees'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1\nConditionalSplit1@HREmployees sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['HR Employees'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink2\nConditionalSplit1@PRODEmployees sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['PROD Employees'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink3"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/WranglingDataFlow1')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "WranglingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"name": "DataSetWrangling",
-							"script": "",
-							"dataset": {
-								"referenceName": "DataSetWrangling",
-								"type": "DatasetReference"
-							}
-						}
-					],
-					"sinks": [
-						{
-							"name": "Sink1",
-							"dataset": {
-								"referenceName": "DataSetOutputFolder",
-								"type": "DatasetReference"
-							},
-							"script": "sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['WranglingCustMaster'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Sink1"
-						}
-					],
-					"script": "section Section1;\r\nshared DataSetWrangling = let\r\n  AdfDoc = AzureStorage.BlobContents(\"https://myfirststoragesuresh.blob.core.windows.net/myfirstcontainer/Input/Customer Master.txt\"),\r\n  Csv = Csv.Document(AdfDoc, [Delimiter = \",\", Encoding = TextEncoding.Utf8, QuoteStyle = QuoteStyle.Csv])\r\nin\r\n  Csv;\r\nshared UserQuery = let\r\n  Source = DataSetWrangling\r\nin\r\n  Source;\r\n"
 				}
 			},
 			"dependsOn": []
