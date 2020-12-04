@@ -1,0 +1,23 @@
+{
+	"name": "DataSetTotalEmployees",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Excel Connection",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Sheet1",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "tblemployee_split.xlsx",
+				"folderPath": "Input",
+				"container": "myfirstcontainer"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

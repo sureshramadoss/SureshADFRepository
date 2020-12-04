@@ -1,0 +1,42 @@
+{
+	"name": "Pipeline-DeleteFiles",
+	"properties": {
+		"activities": [
+			{
+				"name": "Delete1",
+				"type": "Delete",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "OutputBinaryDataSet",
+						"type": "DatasetReference"
+					},
+					"logStorageSettings": {
+						"linkedServiceName": {
+							"referenceName": "Excel Connection",
+							"type": "LinkedServiceReference"
+						},
+						"path": "myfirstcontainer"
+					},
+					"enableLogging": true,
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
+						"wildcardFileName": "*.txt"
+					}
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2020-11-29T16:27:10Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

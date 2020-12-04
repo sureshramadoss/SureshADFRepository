@@ -1,0 +1,36 @@
+{
+	"name": "InputEmployeeExcel",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Excel Connection",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Sheet1",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "tblemployee.xlsx",
+				"folderPath": "Input",
+				"container": "myfirstcontainer"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

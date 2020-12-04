@@ -1,0 +1,25 @@
+{
+	"name": "Trigger 5 Mins",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Pipeline-Filecopy",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 5,
+				"startTime": "2020-11-29T14:02:00Z",
+				"endTime": "2020-11-30T14:02:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}

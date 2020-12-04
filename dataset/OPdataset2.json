@@ -1,0 +1,19 @@
+{
+	"name": "OPdataset2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Textfile Connection",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "op2",
+				"container": "myfirstcontainer"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

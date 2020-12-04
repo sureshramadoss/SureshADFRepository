@@ -1,0 +1,32 @@
+{
+	"name": "DataFlowParameters",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DataSetTotalEmployees",
+						"type": "DatasetReference"
+					},
+					"name": "TotalEmployees"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DataSetParaFilterData",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "FilterByDept"
+				}
+			],
+			"script": "parameters{\n\tDeptName as string\n}\nsource(output(\n\t\temp_id as short,\n\t\temp_name as string,\n\t\temp_gender as string,\n\t\temp_salary as short,\n\t\tDept as short,\n\t\t{Dept Name} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> TotalEmployees\nTotalEmployees filter({Dept Name}==$DeptName) ~> FilterByDept\nFilterByDept sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[('Employee' + $DeptName)],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+		}
+	}
+}

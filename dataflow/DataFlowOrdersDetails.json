@@ -1,0 +1,39 @@
+{
+	"name": "DataFlowOrdersDetails",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DataSetCustomerExcel",
+						"type": "DatasetReference"
+					},
+					"name": "customers"
+				},
+				{
+					"dataset": {
+						"referenceName": "DataSetOrdersExcel",
+						"type": "DatasetReference"
+					},
+					"name": "orders"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "OrderDetailsOutput",
+						"type": "DatasetReference"
+					},
+					"name": "CustomerDetails"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Join1"
+				}
+			],
+			"script": "source(output(\n\t\tcustid as string,\n\t\tcust_name as string,\n\t\tage as string,\n\t\taddress as string,\n\t\tsalary as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> customers\nsource(output(\n\t\toid as string,\n\t\todate as string,\n\t\tcustid as string,\n\t\tamount as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> orders\ncustomers, orders join(customers@custid == orders@custid,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> Join1\nJoin1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['OrderDetailsReport'],\n\tmapColumn(\n\t\tcustid = customers@custid,\n\t\tcust_name,\n\t\tage,\n\t\taddress,\n\t\tsalary,\n\t\toid,\n\t\todate,\n\t\tamount\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> CustomerDetails"
+		}
+	}
+}

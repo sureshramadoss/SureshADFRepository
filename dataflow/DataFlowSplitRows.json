@@ -1,0 +1,50 @@
+{
+	"name": "DataFlowSplitRows",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DataSetTotalEmployees",
+						"type": "DatasetReference"
+					},
+					"name": "OverallEmployees"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DataSetOutputFolder",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DataSetOutputFolder",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "DataSetOutputFolder",
+						"type": "DatasetReference"
+					},
+					"name": "sink3"
+				}
+			],
+			"transformations": [
+				{
+					"name": "ConditionalSplit1"
+				},
+				{
+					"name": "MapDrifted1",
+					"description": "Creates an explicit mapping for each drifted column"
+				}
+			],
+			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tinferDriftedColumnTypes: true) ~> OverallEmployees\nMapDrifted1 split(equals(Dept, '1'),\n\tequals(Dept, '2'),\n\tequals(Dept, '3'),\n\tequals(Dept, '4'),\n\tdisjoint: false,\n\tpartitionBy('hash', 1)) ~> ConditionalSplit1@(ITEmployees, HREmployees, PRODEmployees, PURCHASEEmployees, Others)\nOverallEmployees derive(emp_id = toString(byName('emp_id')),\n\t\temp_name = toString(byName('emp_name')),\n\t\temp_gender = toString(byName('emp_gender')),\n\t\temp_salary = toString(byName('emp_salary')),\n\t\tDept = toString(byName('Dept')),\n\t\t{Dept Name} = toString(byName('Dept Name'))) ~> MapDrifted1\nConditionalSplit1@ITEmployees sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['IT Employees'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1\nConditionalSplit1@HREmployees sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['HR Employees'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink2\nConditionalSplit1@PRODEmployees sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['PROD Employees'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink3"
+		}
+	}
+}

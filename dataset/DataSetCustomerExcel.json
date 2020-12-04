@@ -1,0 +1,44 @@
+{
+	"name": "DataSetCustomerExcel",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Excel Connection",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "custmast",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "order_book.xlsx",
+				"folderPath": "CSV-Export",
+				"container": "myfirstcontainer"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "custid",
+				"type": "String"
+			},
+			{
+				"name": "cust_name",
+				"type": "String"
+			},
+			{
+				"name": "age",
+				"type": "String"
+			},
+			{
+				"name": "address",
+				"type": "String"
+			},
+			{
+				"name": "salary",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

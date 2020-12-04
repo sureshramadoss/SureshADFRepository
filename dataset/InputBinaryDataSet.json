@@ -1,0 +1,20 @@
+{
+	"name": "InputBinaryDataSet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Textfile Connection",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Customer Master.txt",
+				"folderPath": "Input",
+				"container": "myfirstcontainer"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

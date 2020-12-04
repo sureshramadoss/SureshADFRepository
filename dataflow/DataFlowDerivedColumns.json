@@ -1,0 +1,32 @@
+{
+	"name": "DataFlowDerivedColumns",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DataSetCustomerExcel",
+						"type": "DatasetReference"
+					},
+					"name": "Customers"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "OrderDetailsOutput",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DerivedColumn1"
+				}
+			],
+			"script": "source(output(\n\t\tcustid as string,\n\t\tcust_name as string,\n\t\tage as string,\n\t\taddress as string,\n\t\tsalary as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Customers\nCustomers derive(cust_name = upper(cust_name)) ~> DerivedColumn1\nDerivedColumn1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['CustomerMaster'],\n\tmapColumn(\n\t\tcustid,\n\t\tcust_name,\n\t\tage,\n\t\taddress,\n\t\tsalary\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+		}
+	}
+}

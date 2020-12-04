@@ -1,0 +1,23 @@
+{
+	"name": "DataSetSQLFolderList",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SureshSQLDevelopConn",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "sno",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "folder_name",
+				"type": "varchar"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

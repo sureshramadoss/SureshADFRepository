@@ -1,0 +1,13 @@
+{
+	"name": "developsqltablelist",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SureshSQLDevelopConn",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
